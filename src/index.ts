@@ -19,7 +19,7 @@ async function go(platform: string, tag: string) {
     await download(url, ZIP_NAME)
     console.log("Unzip to " + BIN_DIR)
     await new Promise((resolve, reject) => {
-        exec("unzip -o -d" + BIN_DIR + " " + ZIP_NAME, (err, stdout, stderr) => {
+        exec("unzip -o -d " + BIN_DIR + " " + ZIP_NAME, (err, stdout, stderr) => {
             if (err) {
                 return reject(err)
             }
