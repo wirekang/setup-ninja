@@ -1,0 +1,13 @@
+name: setup-ninja
+description: Install ninja from official ninja-build repository
+inputs:
+  platform:
+    description: 'win | linux | mac'
+    required: true
+  tag:
+    description: git tag name
+    required: false
+    default: v1.11.1
+runs:
+  using: node20
+  main: dist/index.js
