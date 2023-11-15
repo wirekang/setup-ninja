@@ -34,8 +34,9 @@ async function go(platform: string, tag: string) {
 
 async function download(url: string, path: string) {
     return new Promise((resolve, reject) => {
-        const file = fs.createWriteStream(path)
+        const file = fs.createWriteStream(path, {encoding: 'binary'})
         const request = https.get(url, (res) => {
+            res.setEncoding('binary')
             res.pipe(file)
             file.on("finish", () => {
                 file.close((err) => {
