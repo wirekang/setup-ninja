@@ -1,7 +1,7 @@
 import * as fs from "node:fs";
 import {exec} from "node:child_process"
 import * as process from "node:process"
-import * as http from "node:http"
+import * as https from "node:https"
 
 import * as core from "@actions/core"
 
@@ -35,7 +35,7 @@ async function go(platform: string, tag: string) {
 async function download(url: string, path: string) {
     return new Promise((resolve, reject) => {
         const file = fs.createWriteStream(path)
-        const request = http.get(url, (res) => {
+        const request = https.get(url, (res) => {
             res.pipe(file)
             file.on("finish", () => {
                 file.close()
