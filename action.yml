@@ -2,12 +2,11 @@ name: wirekang/setup-ninja
 description: Install ninja from official ninja-build repository
 inputs:
   platform:
-    description: 'win | linux | mac'
+    description: "suffix from official release(e.g. 'win', 'linux' or 'mac')"
     required: true
   tag:
-    description: git tag name
-    required: false
-    default: v1.11.1
+    description: "git tag(e.g. v1.11.1)"
+    default: "v1.11.1"
 runs:
   using: node20
   main: dist/index.js

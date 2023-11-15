@@ -2,6 +2,7 @@ import * as fs from "node:fs";
 import {exec} from "node:child_process"
 import fetch from "node-fetch"
 import * as process from "node:process"
+import * as core from "@actions/core"
 
 const DOWNLOAD = "https://github.com/ninja-build/ninja/releases/download/";
 const ZIP_NAME = "temp-setup-ninja.zip"
@@ -37,12 +38,10 @@ async function go(platform: string, tag: string) {
     fs.appendFileSync(githubPath, realpath + "\n", {encoding: "utf-8"})
 }
 
-// (
-//     async () => {
-//         const platform = core.getInput("platform")
-//         const tag = core.getInput("tag")
-//         await go(platform, tag)
-//     }
-// )()
-
-go("win", "v1.11.1")
+(
+    async () => {
+        const platform = core.getInput("platform")
+        const tag = core.getInput("tag")
+        await go(platform, tag)
+    }
+)()
