@@ -1,7 +1,8 @@
 import * as fs from "node:fs";
 import {exec} from "node:child_process"
-import fetch from "node-fetch"
 import * as process from "node:process"
+import * as http from "node:http"
+
 import * as core from "@actions/core"
 
 const DOWNLOAD = "https://github.com/ninja-build/ninja/releases/download/";
@@ -14,11 +15,8 @@ async function go(platform: string, tag: string) {
     console.log("Tag: " + tag)
     console.log("Url: " + url)
 
-    const res = await fetch(url, {method: "GET"})
-    const body = await res.arrayBuffer()
-    console.log("Size: " + body.byteLength)
-    console.log("Save " + ZIP_NAME)
-    fs.writeFileSync(ZIP_NAME, Buffer.from(body), {encoding: "binary"})
+    console.log("Download to " + ZIP_NAME)
+    await download(url, ZIP_NAME)
     console.log("Unzip to " + BIN_DIR)
     await new Promise((resolve, reject) => {
         exec("unzip -o -d" + BIN_DIR + " " + ZIP_NAME, (err, stdout, stderr) => {
@@ -32,6 +30,21 @@ async function go(platform: string, tag: string) {
     const githubPath = process.env["GITHUB_PATH"]
     console.log("Add path " + realpath)
     fs.appendFileSync(githubPath, realpath + "\n", {encoding: "utf-8"})
+}
+
+async function download(url: string, path: string) {
+    return new Promise((resolve, reject) => {
+        const file = fs.createWriteStream(path)
+        const request = http.get(url, (res) => {
+            res.pipe(file)
+            file.on("finish", () => {
+                file.close()
+                resolve(undefined)
+            })
+            file.on("error", reject)
+        })
+        request.on("error", reject)
+    })
 }
 
 (
