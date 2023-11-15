@@ -38,8 +38,13 @@ async function download(url: string, path: string) {
         const request = https.get(url, (res) => {
             res.pipe(file)
             file.on("finish", () => {
-                file.close()
-                resolve(undefined)
+                file.close((err) => {
+                    if (err) {
+                        reject(err)
+                    } else {
+                        resolve(undefined)
+                    }
+                })
             })
             file.on("error", reject)
         })
