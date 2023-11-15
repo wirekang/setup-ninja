@@ -5,25 +5,21 @@ import * as process from "node:process"
 import * as core from "@actions/core"
 
 const DOWNLOAD = "https://github.com/ninja-build/ninja/releases/download/";
-const ZIP_NAME = "temp-setup-ninja.zip"
-const BIN_DIR = "ninja-setup-bin"
+const ZIP_NAME = "setup-ninja.zip"
+const BIN_DIR = "setup-ninja-bin"
 
 async function go(platform: string, tag: string) {
     const url = DOWNLOAD + tag + "/ninja-" + platform + ".zip"
+    console.log("Platform: " + platform)
+    console.log("Tag: " + tag)
     console.log("Url: " + url)
+
     const res = await fetch(url, {method: "GET"})
     const body = await res.arrayBuffer()
     console.log("Size: " + body.byteLength)
-    console.log("Write " + ZIP_NAME)
-    await new Promise((resolve, reject) => {
-        fs.writeFile(ZIP_NAME, Buffer.from(body), {encoding: "binary"}, (err) => {
-            if (err) {
-                reject(err)
-            }
-            resolve(1)
-        })
-    })
-    console.log("Unzip " + BIN_DIR)
+    console.log("Save " + ZIP_NAME)
+    fs.writeFileSync(ZIP_NAME, Buffer.from(body), {encoding: "binary"})
+    console.log("Unzip to " + BIN_DIR)
     await new Promise((resolve, reject) => {
         exec("unzip -o -d" + BIN_DIR + " " + ZIP_NAME, (err, stdout, stderr) => {
             if (err) {
