@@ -1,15 +1,13 @@
 import * as fs from "node:fs";
 import {exec} from "node:child_process"
 import * as process from "node:process"
-import * as https from "node:https"
-
-import * as core from "@actions/core"
+import fetch from "node-fetch"
 
 const DOWNLOAD = "https://github.com/ninja-build/ninja/releases/download/";
 const ZIP_NAME = "setup-ninja.zip"
 const BIN_DIR = "setup-ninja-bin"
 
-async function go(platform: string, tag: string) {
+export async function start(platform, tag) {
     const url = DOWNLOAD + tag + "/ninja-" + platform + ".zip"
     console.log("Platform: " + platform)
     console.log("Tag: " + tag)
@@ -32,31 +30,20 @@ async function go(platform: string, tag: string) {
     fs.appendFileSync(githubPath, realpath + "\n", {encoding: "utf-8"})
 }
 
-async function download(url: string, path: string) {
+async function download(url, path) {
+    const file = fs.createWriteStream(path)
+    const res = await fetch(url)
+    res.body.pipe(file)
     return new Promise((resolve, reject) => {
-        const file = fs.createWriteStream(path, {encoding: 'binary'})
-        const request = https.get(url, (res) => {
-            res.setEncoding('binary')
-            res.pipe(file)
-            file.on("finish", () => {
-                file.close((err) => {
-                    if (err) {
-                        reject(err)
-                    } else {
-                        resolve(undefined)
-                    }
-                })
+        file.on("finish", () => {
+            file.close((err) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve(undefined)
+                }
             })
-            file.on("error", reject)
         })
-        request.on("error", reject)
+        file.on("error", reject)
     })
 }
-
-(
-    async () => {
-        const platform = core.getInput("platform")
-        const tag = core.getInput("tag")
-        await go(platform, tag)
-    }
-)()

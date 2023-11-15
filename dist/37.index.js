@@ -1,17 +1,16 @@
-"use strict";
-exports.id = 37;
-exports.ids = [37];
-exports.modules = {
+export const id = 37;
+export const ids = [37];
+export const modules = {
 
-/***/ 37:
+/***/ 4037:
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "toFormData": () => (/* binding */ toFormData)
 /* harmony export */ });
-/* harmony import */ var fetch_blob_from_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(972);
-/* harmony import */ var formdata_polyfill_esm_min_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
+/* harmony import */ var fetch_blob_from_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7972);
+/* harmony import */ var formdata_polyfill_esm_min_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8010);
 
 
 
@@ -449,4 +448,3 @@ async function toFormData(Body, ct) {
 /***/ })
 
 };
-;
