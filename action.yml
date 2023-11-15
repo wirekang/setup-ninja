@@ -1,4 +1,4 @@
-name: setup-ninja
+name: wirekang/setup-ninja
 description: Install ninja from official ninja-build repository
 inputs:
   platform:
